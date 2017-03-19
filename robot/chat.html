@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>robot chatting</title>
+	 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script>
+	  var socket = io();
+	  $(document).ready(function(){
+	    var name = prompt("enter your name","guest"); 
+		  if (name == "" ||  name == null){
+		    name = "guest";
+		  }
+		socket.emit("new guest", name);
+		/*socket.on("guest add",function(msg){
+		  $('#chatBlock').append(msg + " " + "left"<br/>);
+		});
+	    socket.on("guest left",function(msg){
+		  $('#chatBlock').append(msg + " " + "left"<br/>);
+		/*socket.on("guest add",function(data){
+		  appendMessage(data.username+"added");
+		});
+		socket.on("guest leave",function(data){
+		  appendMessage(data.username+"leave");
+ 		});*/
+	  });
+	
+	</script>
+</head>
+<body>
+<h3>hello server</h3>
+ <div id = "chatBlock"></div>
+
+</body>
+</html>

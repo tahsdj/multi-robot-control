@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>robot chatting</title>
+	 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<style>
+	   #button{
+	      position: absolute;
+		  margin : 0px;
+		  left : 500px;
+		  width : 400px;
+	   }
+	</style>
+	<script>
+	  var socket = io();
+	  $(document).ready(function(){
+	    var name = prompt("enter your name","guest"); 
+		  if (name == "" ||  name == null){
+		    name = "guest";
+		  }
+		socket.emit("new guest", name);
+		socket.on("guest add",function(msg){
+		  $("#chatBlock").append(msg + " " +"join<br/>");
+		 });
+	    socket.on("guest left",function(msg){
+		   $("#chatBlock").append(msg + " " +"left<br/>");
+ 		 });
+		 $("#sendtext").click(function(){
+		   var text = $("#message").val();
+		   socket.emit( 'chat',$("#message").val());
+		   if ( text == null || text == "" ){
+			   return false;
+		   }else{
+		       $("#chatBlock").append(name+":"+text+"</br>");
+			   $("#message").val('');
+			   return false;
+		   }
+		   $("led").click(function(){
+		       var p = $(this).attr('id');
+			   socket.emit('chat',p);
+		   });
+		 });
+		 $("#message").keydown(function(event){
+		    if (event.which == 13 ){
+			  $("#sendtext").click();
+ 			}
+		 });
+		 socket.on('chat',function(data){
+		   $("#chatBlock").append(data.username+":"+data.msg+"</br>");
+		 });
+		 var leftPressed,upPressed,downPressed,rightPressed,spacePressed,w,s,a,d,x;
+		 document.addEventListener("keydown", keyDownHandler, false);
+         document.addEventListener("keyup", keyUpHandler, false);
+		  function keyDownHandler(e) {
+			   if(e.keyCode == 39) {
+						rightPressed = true;
+						socket.emit( 'chat', "r" );
+					}
+			   else if(e.keyCode == 37) {
+						leftPressed = true;
+						socket.emit( 'chat', "l");
+					}
+			   else if(e.keyCode == 38){
+			            upPressed = true;
+						socket.emit( 'chat', "f");
+			   }
+			   else if(e.keyCode == 40){
+			            downPressed = true;
+						socket.emit( 'chat', "b");
+			   }
+			   else if(e.keyCode == 32){
+			            spacePressed = true;
+						socket.emit( 'chat', "s");
+			   }
+			   else if(e.keyCode == 87){
+			            w = true;
+						socket.emit( 'chat', "p");
+			   }
+			   else if(e.keyCode == 83){
+			            s = true;
+						socket.emit( 'chat', "t");
+			   }
+			   else if(e.keyCode == 65){
+			            a = true;
+						socket.emit( 'chat', "m");
+			   }
+			   else if(e.keyCode == 68){
+			            d = true;
+						socket.emit( 'chat', "n");
+			   }
+			   else if(e.keyCode == 88){
+			            x = true;
+						socket.emit( 'chat', "a");
+			   }
+			}
+		  function keyUpHandler(e) {
+			 if(e.keyCode == 39) {
+						rightPressed = false;
+					}
+			else if(e.keyCode == 37) {
+						leftPressed = false;
+					}
+			else if(e.keyCode == 38){
+			            upPressed = true;
+			       }
+		    else if(e.keyCode == 40){
+			            downPressed = true;
+			       }
+				}
+		});
+	</script>
+</head>
+<body>
+<h3>chat with arduino</h3>
+  <div id = "chatBlock"></div>
+  <div id = "message-box">
+  <input type = 'text' id ="message" size = "40"/>
+  <input type = 'button' id = "sendtext" value = "Send"></div>
+
+
+</body>
+</html>
